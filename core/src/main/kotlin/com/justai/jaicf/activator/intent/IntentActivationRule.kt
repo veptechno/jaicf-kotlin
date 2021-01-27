@@ -6,4 +6,4 @@ abstract class IntentActivationRule(val intentMatches: (String) -> Boolean): Act
 
 open class IntentByNameActivationRule(val intent: String): IntentActivationRule({ it == intent })
 
-class AnyIntentActivationRule(val except: MutableList<String> = mutableListOf()): IntentActivationRule({ it !in except })
+class AnyIntentActivationRule(val except: List<String> = listOf()): IntentActivationRule({ it !in except })

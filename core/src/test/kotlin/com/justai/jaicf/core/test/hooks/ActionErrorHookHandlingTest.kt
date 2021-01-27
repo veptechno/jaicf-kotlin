@@ -4,13 +4,15 @@ import com.justai.jaicf.hook.ActionErrorHook
 import com.justai.jaicf.model.scenario.Scenario
 import com.justai.jaicf.test.ScenarioTest
 import org.junit.jupiter.api.Test
+import com.justai.jaicf.builder.*
 
-val scenarioWithErrorHook = object : Scenario() {
-    init {
-        handle<ActionErrorHook> {
-            it.reactions.say("Error happened. Sorry.")
-        }
+val scenarioWithErrorHook = Scenario {
 
+    handle<ActionErrorHook> {
+        it.reactions.say("Error happened. Sorry.")
+    }
+
+    start {
         state("error") {
             activators { regex("error") }
             action {
@@ -27,7 +29,7 @@ val scenarioWithErrorHook = object : Scenario() {
     }
 }
 
-class ActionErrorHookHandlingTest : ScenarioTest(scenarioWithErrorHook.model) {
+class ActionErrorHookHandlingTest : ScenarioTest(scenarioWithErrorHook) {
 
     @Test
     fun `should handle error with some reaction`() {
