@@ -18,12 +18,9 @@ class BotHookHandler {
      * @param action a block that will be invoked once specified [BotHook] was triggered.
      * @see BotHook
      */
-    inline fun <reified T: BotHook> addHookAction(noinline action: (T) -> Unit) {
-        actions.run {
-            putIfAbsent(T::class, mutableListOf())
-            val actions = get(T::class)
-            actions?.add(action as BotHookAction<in BotHook>)
-        }
+    inline fun <reified T: BotHook> addHookAction(noinline action: T.() -> Unit) {
+        val hookAction = { hook: T -> hook.action() }
+        actions.computeIfAbsent(T::class) { mutableListOf() }.add(hookAction as BotHookAction<in BotHook>)
     }
 
     /**

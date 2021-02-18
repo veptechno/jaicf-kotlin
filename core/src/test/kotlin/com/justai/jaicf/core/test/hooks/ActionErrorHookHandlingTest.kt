@@ -9,7 +9,7 @@ import com.justai.jaicf.builder.*
 val scenarioWithErrorHook = Scenario {
 
     handle<ActionErrorHook> {
-        it.reactions.say("Error happened. Sorry.")
+        reactions.say("Error happened. Sorry.")
     }
 
     start {
