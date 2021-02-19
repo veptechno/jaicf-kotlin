@@ -10,6 +10,7 @@ import com.justai.jaicf.activator.selection.ActivationSelector
 import com.justai.jaicf.activator.strict.ButtonActivator
 import com.justai.jaicf.api.BotApi
 import com.justai.jaicf.api.BotRequest
+import com.justai.jaicf.builder.theme.demo.Theme
 import com.justai.jaicf.context.BotContext
 import com.justai.jaicf.context.ProcessContext
 import com.justai.jaicf.context.RequestContext
@@ -57,7 +58,7 @@ import com.justai.jaicf.slotfilling.*
  * @see ConversationLogger
  */
 class BotEngine(
-    scenario: Scenario,
+    scenario: Theme,
     val defaultContextManager: BotContextManager = InMemoryBotContextManager,
     activators: Array<ActivatorFactory> = emptyArray(),
     private val activationSelector: ActivationSelector = ActivationSelector.default,
