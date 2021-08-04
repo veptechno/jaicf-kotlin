@@ -37,8 +37,4 @@ class DialogContext : Serializable {
 
         return currentContext
     }
-
-    override fun toString(): String {
-        return "DialogContext(nextContext=$nextContext, currentContext='$currentContext', nextState=$nextState, currentState='$currentState', transitions=$transitions, backStateStack=$backStateStack)"
-    }
 }
