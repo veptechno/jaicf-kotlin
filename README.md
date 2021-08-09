@@ -16,7 +16,7 @@ val HelloWorldScenario = Scenario {
     state("main") {
         activators {
             event(AlexaEvent.LAUNCH)
-            intent(DialogflowIntent.WELCOME)
+            intent(DialogflowIntent.WELCOME)прмирп
             regex("/start")
         }
         
