@@ -39,6 +39,6 @@ jobs:
       run: chmod +x gradle/wrapper/gradle-wrapper.jar
       
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build --stacktrace
 
  
