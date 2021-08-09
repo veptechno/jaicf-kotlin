@@ -26,7 +26,7 @@ class MongoBotContextManagerTest {
 
     @BeforeAll
     internal fun setup() {
-        val port = Network.getFreeServerPort()
+        val port = 8080
         MongodConfig.builder()
             .version(Version.Main.PRODUCTION)
             .net(Net(port, false))
