@@ -25,6 +25,8 @@ jobs:
 
     - name: MongoDB in GitHub Actions
       uses: supercharge/mongodb-github-action@1.6.0
+      with:
+        mongodb-port: 27017
 
     - name: Set up JDK 9
       uses: actions/setup-java@v2
