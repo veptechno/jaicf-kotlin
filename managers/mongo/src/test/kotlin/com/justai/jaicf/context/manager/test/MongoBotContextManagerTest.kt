@@ -17,40 +17,16 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class MongoBotContextManagerTest {
+abstract class MongoBotContextManagerTestBase {
 
-    private lateinit var mongo: MongodExecutable
-    private lateinit var manager: MongoBotContextManager
+    lateinit var manager: MongoBotContextManager
 
-    @BeforeAll
-    internal fun setup() {
-        val port = 27017
-//         MongodConfig.builder()
-//             .version(Version.Main.PRODUCTION)
-//             .net(Net(port, false))
-//             .build().let { config ->
-//                 try {
-//                     val a = MongodStarter.getDefaultInstance()
-//                     mongo = a.prepare(config)
-//                     mongo.start()
-//                 } catch (e: Exception) {
-//                     e.printStackTrace()
-//                     println(e)
-//                     System.err.println(e.stackTraceToString())
-//                     throw e
-//                 }
-//             }
-
-        val client = MongoClients.create("mongodb://localhost:$port")
-        manager = MongoBotContextManager(client.getDatabase("jaicf").getCollection("contexts"))
-    }
-
-    @AfterAll
-    internal fun shutdown() {
-//         mongo.stop()
-    }
+    internal abstract fun setup()
+    internal open fun shutdown() {}
 
     @Test
     fun testSave() {
@@ -82,5 +58,41 @@ class MongoBotContextManagerTest {
         assertNotNull(result)
         assertTrue(result.result is CustomValue)
         assertTrue(result.session["value"] is CustomValue)
+    }
+}
+
+@EnabledIfEnvironmentVariable(named = "github", matches = "true")
+class MongoBotContextManagerTestWithExternalDatabase : MongoBotContextManagerTestBase() {
+
+    @BeforeAll
+    internal override fun setup() {
+        val client = MongoClients.create("mongodb://localhost:12701")
+        manager = MongoBotContextManager(client.getDatabase("jaicf").getCollection("contexts"))
+    }
+}
+
+@DisabledIfEnvironmentVariable(named = "github", matches = "true")
+class MongoBotContextManagerTestWithEmbeddedMongo : MongoBotContextManagerTestBase() {
+
+    private lateinit var mongo: MongodExecutable
+
+    @BeforeAll
+    internal override fun setup() {
+        val port = Network.getFreeServerPort()
+        MongodConfig.builder()
+            .version(Version.Main.PRODUCTION)
+            .net(Net(port, false))
+            .build().let { config ->
+                mongo = MongodStarter.getDefaultInstance().prepare(config)
+                mongo.start()
+            }
+
+        val client = MongoClients.create("mongodb://localhost:$port")
+        manager = MongoBotContextManager(client.getDatabase("jaicf").getCollection("contexts"))
+    }
+
+    @AfterAll
+    internal override fun shutdown() {
+        mongo.stop()
     }
 }
