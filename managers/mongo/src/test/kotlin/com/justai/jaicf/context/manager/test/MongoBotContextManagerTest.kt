@@ -49,7 +49,7 @@ class MongoBotContextManagerTest {
 
     @AfterAll
     internal fun shutdown() {
-        mongo.stop()
+//         mongo.stop()
     }
 
     @Test
