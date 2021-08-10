@@ -27,21 +27,21 @@ class MongoBotContextManagerTest {
     @BeforeAll
     internal fun setup() {
         val port = 27017
-        MongodConfig.builder()
-            .version(Version.Main.PRODUCTION)
-            .net(Net(port, false))
-            .build().let { config ->
-                try {
-                    val a = MongodStarter.getDefaultInstance()
-                    mongo = a.prepare(config)
-                    mongo.start()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    println(e)
-                    System.err.println(e.stackTraceToString())
-                    throw e
-                }
-            }
+//         MongodConfig.builder()
+//             .version(Version.Main.PRODUCTION)
+//             .net(Net(port, false))
+//             .build().let { config ->
+//                 try {
+//                     val a = MongodStarter.getDefaultInstance()
+//                     mongo = a.prepare(config)
+//                     mongo.start()
+//                 } catch (e: Exception) {
+//                     e.printStackTrace()
+//                     println(e)
+//                     System.err.println(e.stackTraceToString())
+//                     throw e
+//                 }
+//             }
 
         val client = MongoClients.create("mongodb://localhost:$port")
         manager = MongoBotContextManager(client.getDatabase("jaicf").getCollection("contexts"))
